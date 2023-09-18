@@ -51,44 +51,7 @@
       <form class="cart__form form" action="#" method="POST">
         <div class="cart__field">
           <ul class="cart__list">
-            <li class="cart__item product" v-for="item in products" :key="item.productId">
-              <div class="product__pic">
-                <img :src="item.product.image" width="120" height="120" alt="item.product.title">
-              </div>
-              <h3 class="product__title">
-                {{ item.product.title }}
-              </h3>
-              <span class="product__code">
-                {{ item.product.id }}
-              </span>
-
-              <div class="product__counter form__counter">
-                <button type="button" aria-label="Убрать один товар">
-                  <svg width="10" height="10" fill="currentColor">
-                    <use xlink:href="#icon-minus"></use>
-                  </svg>
-                </button>
-
-                <input type="text" :value="item.amount" name="count">
-
-                <button type="button" aria-label="Добавить один товар">
-                  <svg width="10" height="10" fill="currentColor">
-                    <use xlink:href="#icon-plus"></use>
-                  </svg>
-                </button>
-              </div>
-
-              <b class="product__price">
-                {{ (item.amount * item.product.price) | numberFormat }} ₽
-              </b>
-
-              <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины">
-                <svg width="20" height="20" fill="currentColor">
-                  <use xlink:href="#icon-close"></use>
-                </svg>
-              </button>
-            </li>
-
+            <CartItem v-for="item in products" :key="item.productId" :item="item"/>
           </ul>
         </div>
 
@@ -109,68 +72,15 @@
   </main>
   </body>
   </html>
-<!--  <main class="content container">-->
-<!--    <div class="content__top">-->
-<!--      <ul class="breadcrumbs">-->
-<!--        <li class="breadcrumbs__item">-->
-<!--          <router-link class="breadcrumbs__link" :to="{name: 'main'}"> Каталог </router-link>-->
-<!--        </li>-->
-<!--        <li class="breadcrumbs__item">-->
-<!--          <a class="breadcrumbs__link">-->
-<!--            Корзина-->
-<!--          </a>-->
-<!--        </li>-->
-<!--      </ul>-->
-
-<!--      <h1 class="content__title">-->
-<!--        Корзина-->
-<!--      </h1>-->
-<!--      <span class="content__info">-->
-<!--        {{ totalProducts }}-->
-<!--      </span>-->
-<!--      <span class="content__info" v-if="totalProducts === 1">-->
-<!--        товар-->
-<!--      </span>-->
-<!--      <span class="content__info" v-else-if="totalProducts === 2 || totalProducts === 3 ||-->
-<!--      totalProducts === 4">-->
-<!--        товара-->
-<!--      </span>-->
-<!--      <span class="content__info" v-else>-->
-<!--        товаров-->
-<!--      </span>-->
-<!--    </div>-->
-
-<!--    <section class="cart">-->
-<!--      <form class="cart__form form" action="#" method="POST">-->
-<!--        <div class="cart__field">-->
-<!--          <ul class="cart__list">-->
-<!--            <CartItem v-for="item in products" :key="item.productId" :item="item"/>-->
-<!--          </ul>-->
-<!--        </div>-->
-
-<!--        <div class="cart__block">-->
-<!--          <p class="cart__desc">-->
-<!--            Мы&nbsp;посчитаем стоимость доставки на&nbsp;следующем этапе-->
-<!--          </p>-->
-<!--          <p class="cart__price">-->
-<!--            Итого: <span>{{ totalPrice | numberFormat }} ₽</span>-->
-<!--          </p>-->
-
-<!--          <button class="cart__button button button&#45;&#45;primery" type="submit">-->
-<!--            Оформить заказ-->
-<!--          </button>-->
-<!--        </div>-->
-<!--      </form>-->
-<!--    </section>-->
-<!--  </main>-->
 </template>
-
-
 <script>
 import numberFormat from "@/helpers/numberFormat";
 import { mapGetters } from 'vuex';
+import CartItem from "@/components/CartItem.vue";
+
 export default {
   name: 'cartPage',
+  components: {CartItem},
   filters: {numberFormat},
   computed: {
     ...mapGetters({products: 'cartDetailProducts', totalPrice: 'cartTotalPrice', totalProducts: 'cartTotalProducts'})
