@@ -32,8 +32,19 @@
         Корзина
       </h1>
       <span class="content__info">
-        3 товара
+        {{ totalProducts }}
       </span>
+      <span class="content__info" v-if="totalProducts === 1">
+        товар
+      </span>
+      <span class="content__info" v-else-if="totalProducts === 2 || totalProducts === 3 ||
+      totalProducts === 4">
+        товара
+      </span>
+      <span class="content__info" v-else>
+        товаров
+      </span>
+
     </div>
 
     <section class="cart">
@@ -68,7 +79,7 @@
               </div>
 
               <b class="product__price">
-                {{ (item.amount * item.product.price) | numberFormat }}
+                {{ (item.amount * item.product.price) | numberFormat }} ₽
               </b>
 
               <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины">
@@ -86,7 +97,7 @@
             Мы&nbsp;посчитаем стоимость доставки на&nbsp;следующем этапе
           </p>
           <p class="cart__price">
-            Итого: <span>{{ totalPrice | numberFormat }}</span>
+            Итого: <span>{{ totalPrice | numberFormat }} ₽</span>
           </p>
 
           <button class="cart__button button button--primery" type="submit">
@@ -162,7 +173,7 @@ export default {
   name: 'cartPage',
   filters: {numberFormat},
   computed: {
-    ...mapGetters({products: 'cartDetailProducts', totalPrice: 'cartTotalPrice'})
+    ...mapGetters({products: 'cartDetailProducts', totalPrice: 'cartTotalPrice', totalProducts: 'cartTotalProducts'})
   }
 };
 </script>
