@@ -32,7 +32,25 @@ export default new Vuex.Store({
         },
         deleteCartProduct(state, productId) {
             state.cartProducts = state.cartProducts.filter(item => item.productId !== productId);
-        }
+        },
+        incCartAmount(state, productId) {
+            const item = state.cartProducts.find(item => item.productId === productId);
+
+            if (item) {
+                item.amount += 1;
+            }
+        },
+        decCartAmount(state, productId) {
+            const item = state.cartProducts.find(item => item.productId === productId);
+
+            if (item) {
+                if (item.amount > 0) {
+                    item.amount -= 1;
+                } else {
+                    item.amount = 0;
+                }
+            }
+        },
     },
     getters: {
         cartDetailProducts(state) {
