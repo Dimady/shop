@@ -97,7 +97,7 @@
 
             <div class="item__row">
               <div class="form__counter">
-                <button type="button" aria-label="Убрать один товар">
+                <button type="button" aria-label="Убрать один товар" @click.prevent="decAmount()">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-minus"></use>
                   </svg>
@@ -105,7 +105,7 @@
 
                 <input type="text" v-model.number="productAmount">
 
-                <button type="button" aria-label="Добавить один товар">
+                <button type="button" aria-label="Добавить один товар" @click.prevent="incAmount()">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-plus"></use>
                   </svg>
@@ -199,8 +199,18 @@ import numberFormat from "@/helpers/numberFormat";
       addToCart() {
         this.$store.commit(
             'addProductToCart',
-          {productId: this.product.id, amount: this.productAmount}
+            {productId: this.product.id, amount: this.productAmount}
         );
+      },
+      incAmount() {
+        this.productAmount += 1;
+      },
+      decAmount() {
+        if (this.productAmount > 0) {
+          this.productAmount -= 1;
+        } else {
+          this.productAmount = 0;
+        }
       }
     }
   }

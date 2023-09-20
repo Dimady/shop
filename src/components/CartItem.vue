@@ -53,7 +53,7 @@ import { mapMutations } from 'vuex';
       },
     },
     methods: {
-       ...mapMutations({deleteProduct: 'deleteCartProduct', incAmount: 'incCartAmount', decAmount: 'decCartAmount' }),
+       ...mapMutations({deleteProduct: 'deleteCartProduct', incAmount: 'incCartAmount', decAmount: 'decCartAmount' })
     }
   }
 </script>
