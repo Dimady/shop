@@ -14,36 +14,16 @@
               {{ product.price | numberFormat }}
             </span>
 
-            <ul class="colors colors--black">
-              <li class="colors__item">
-                <label class="colors__label">
-                  <input class="colors__radio sr-only" type="radio" value="#000" v-model="color">
-                  <span class="colors__value" style="background-color: #000;">
-                  </span>
-                </label>
-              </li>
-              <li class="colors__item">
-                <label class="colors__label">
-                  <input class="colors__radio sr-only" type="radio" value="#FFBE15" v-model="color">
-                  <span class="colors__value" style="background-color: #FFBE15;">
-                  </span>
-                </label>
-              </li>
-              <li class="colors__item">
-                <label class="colors__label">
-                  <input class="colors__radio sr-only" type="radio" value="#939393" v-model="color">
-                  <span class="colors__value" style="background-color: #939393;">
-                  </span>
-                </label>
-              </li>
-            </ul>
+    <ColorsList class="colors--black" :colors="colors" :elementName="'product_' + product.id" :current-color="firstColor"/>
   </li>
 </template>
 
 <script>
 import gotoPage from "@/helpers/gotoPage";
 import numberFormat from "@/helpers/numberFormat";
+import ColorsList from "@/components/ColorsList.vue";
 export default {
+  components: {ColorsList},
   data() {
     return {
       color: '#000'
@@ -51,6 +31,14 @@ export default {
   },
   filters: {
     numberFormat
+  },
+  computed: {
+    colors() {
+      return this.product.colors;
+    },
+    firstColor() {
+      return this.colors[0].id;
+    },
   },
   methods: {
     gotoPage

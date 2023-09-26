@@ -109,24 +109,30 @@
   </aside>
 </template>
 <script>
-  import categories from "../data/categories";
-  import colors from "../data/colors";
+  import axios from "axios";
+  import {API_BASE_URL} from "../config";
+  import ColorsList from "@/components/ColorsList.vue";
   export default {
+    components: {
+      ColorsList,
+    },
     data() {
       return {
         currentPriceFrom: 0,
         currentPriceTo: 0,
         currentCategoryId: 0,
-        currentColorId: 0
+        currentColorId: 0,
+        categoriesData: null,
+        colorsData: null
       }
     },
     props: ['priceFrom', 'priceTo', 'categoryId', 'colorId'],
     computed: {
       categories() {
-        return categories;
+        return this.categoriesData ? this.categoriesData.items : [];
       },
       colors() {
-        return colors;
+        return this.colorsData ? this.colorsData.items : [];
       },
     },
     watch: {
@@ -149,14 +155,25 @@
         this.$emit('update:priceTo', this.currentPriceTo);
         this.$emit('update:categoryId', this.currentCategoryId);
         this.$emit('update:colorId', this.currentColorId);
-
       },
       reset() {
         this.$emit('update:priceFrom', 0);
         this.$emit('update:priceTo', 0);
         this.$emit('update:categoryId', 0);
         this.$emit('update:colorId', 0);
+      },
+      loadColors() {
+        axios.get(API_BASE_URL + '/api/colors')
+            .then(response => this.colorsData = response.data);
+      },
+      loadCategories() {
+        axios.get(API_BASE_URL + '/api/productCategories')
+            .then(response => this.categoriesData = response.data);
       }
+    },
+    created() {
+      this.loadColors();
+      this.loadCategories();
     }
   }
 </script>
