@@ -9,9 +9,17 @@ export default new Vuex.Store({
     state: {
         cartProducts: [],
         userAccessKey: null,
-        cartProductsData: []
+        cartProductsData: [],
+        orderInfo: null
     },
     mutations: {
+        updateOrderInfo(state, orderInfo) {
+            state.orderInfo = orderInfo;
+        },
+        resetCart(state) {
+            state.cartProducts = [];
+            state.cartProductsData = [];
+        },
         updateCartProductAmount(state, {productId, amount}) {
             const item = state.cartProducts.find(item => item.productId === productId);
 
@@ -64,18 +72,46 @@ export default new Vuex.Store({
                     product: {
                         ...product,
                         image: product.image.file.url
-                    }
+                    },
+                    costAmount: product.price * item.amount
                 };
             });
+        },
+        orderProducts(state) {
+            if (state.orderInfo) {
+                return state.orderInfo.basket.items.map((item) => ({
+                    ...item,
+                    costAmount: item.price * item.quantity,
+                    amount: item.quantity,
+                }));
+            }
+            return [];
         },
         cartTotalPrice(state, getters) {
             return getters.cartDetailProducts.reduce((acc, item) => (item.product.price * item.amount) + acc, 0);
         },
+        // cartTotalAmount(state, getters) {
+        //     return getters.cartDetailProducts.reduce((acc, item) => item.amount + acc, 0);
+        // },
         cartTotalProducts(state) {
             return state.cartProducts.length;
         }
     },
     actions: {
+        loadOrderInfo(context, orderId) {
+            return (new Promise((resolve) => setTimeout(resolve, 1000)))
+                .then(() => {
+                    axios.get(API_BASE_URL + '/api/orders/' + orderId, {
+                        params: {
+                            userAccessKey: context.state.userAccessKey,
+                        },
+                    })
+                        .then((response) => {
+                            context.commit('updateOrderInfo', response.data);
+                        })
+                        //.catch(() => router.replace({ name: 'notFound' }));
+                });
+        },
         loadCart(context) {
             axios.get(API_BASE_URL + '/api/baskets', {
                 params: {
